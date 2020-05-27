@@ -1,0 +1,51 @@
+<div class="col-lg-9 mx-auto" *ngIf="currentUser.role === role.ADMIN.ordinal">
+  <h2 class="text-center">Сторінка адміністратора</h2>
+  <div class="form-inline my-4">
+    <input type="text" class="form-control col-8" placeholder="Введіть ім'я" [(ngModel)]="searchInput">
+    <button (click)="searchUser()" class="btn btn-outline-success col-4">Шукати</button>
+  </div>
+  <h4 *ngIf="foundUsers.length > 0">Знайдено: {{foundUsers.length}}</h4>
+  <table *ngIf="foundUsers.length > 0" class="table table-bordered table-striped">
+    <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Логін</th>
+      <th scope="col">Справжнє ім'я</th>
+      <th scope="col">Роль</th>
+    </tr>
+    </thead>
+    <tr *ngFor="let user of foundUsers">
+      <td>{{user.id}}</td>
+      <td><a [routerLink]="['/users/', user.id]">{{user.login}}</a></td>
+      <td>{{user.realName}}</td>
+      <!--<td>{{user.role | role}}</td>-->
+      <td><select id="role1" class="form-control" #r (change)="changeRole(user, r.value)"
+                  name="role" [(ngModel)]="user.role">
+        <option *ngFor="let val of role.values" [value]="val.ordinal">{{val.name}}</option>
+      </select></td>
+      <td><button class="btn btn-outline-danger" (click)="delete(user.id)">Видалити акаунт</button></td>
+      <!--<td><button (click)="save(user)">Save</button></td>-->
+    </tr>
+  </table>
+  <table class="table table-bordered table-striped my-6">
+    <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Логін</th>
+      <th scope="col">Справжнє ім'я</th>
+      <th scope="col">Роль</th>
+    </tr>
+    </thead>
+    <tr *ngFor="let user of users">
+      <td>{{user.id}}</td>
+      <td><a [routerLink]="['/users/', user.id]">{{user.login}}</a></td>
+      <td>{{user.realName}}</td>
+      <!--<td>{{user.role | role}}</td>-->
+      <td><select id="role" class="form-control" #r (change)="changeRole(user, r.value)"
+                  name="role" [(ngModel)]="user.role">
+        <option *ngFor="let val of role.values" [value]="val.ordinal">{{val.name}}</option>
+      </select></td>
+      <td><button class="btn btn-outline-danger" (click)="delete(user.id)">Видалити акаунт</button></td>
+    </tr>
+  </table>
+</div>

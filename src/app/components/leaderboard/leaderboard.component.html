@@ -1,0 +1,3 @@
+<div *ngFor="let leader of leaderboard; let i = index">
+  <p>{{i + 1}}. {{leader?.user?.realName}} {{leader.result}} {{leader.spendTime}}</p>
+</div>

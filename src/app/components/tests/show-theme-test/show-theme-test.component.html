@@ -1,0 +1,42 @@
+<h2>Тест за темою</h2>
+<p>Ви не отримуєте бали за даний тип тестів, вам буде лише показано, правильно ви відповіли чи ні</p>
+<div class="my-5">
+  <div class="card">
+    <div class="card-body">
+      <div class="card card-inner" *ngFor="let question of questions; index as i">
+        <div class="card-body">
+          <h4 class="text-center">Запитання: {{question.text}}</h4>
+          <div *ngIf="!testIsFinished">
+            <div *ngIf="question.questionType === questionType.SINGLE_ANSWER.ordinal">
+              <div *ngFor="let option of question.answerOptions; let j = index;">
+                <input id="'radio' + {{j}}" type="radio" [value]="option"
+                       [(ngModel)]="userAnswers[i].answers[0]">
+                <label for="'radio' + {{j}}">
+                  {{option}}
+                </label>
+              </div>
+            </div>
+            <div *ngIf="question.questionType === questionType.MULTI_ANSWER.ordinal">
+              <div class="form-check" *ngFor="let option of question.answerOptions; let j = index;">
+                <input class="form-check-input" type="checkbox" id="'check' + {{j}}"
+                       [(ngModel)]="userAnswers[i].answers[j]">
+                <label class="form-check-label" for="'check' + {{j}}">
+                  {{option}}
+                </label>
+              </div>
+            </div>
+            <div *ngIf="question.questionType === questionType.OPEN.ordinal">
+              <input type="text" [(ngModel)]="userAnswers[i].answers[0]" placeholder="Відповідь" required="true">
+            </div>
+          </div>
+          <div *ngIf="testIsFinished | async">
+            Ваша відповідь - {{analysisMap.get(question.id).userAnswerDto.answers}}
+            <br>
+            Це - {{analysisMap.get(question.id).correct ? '' : 'не'}}правильна відповідь
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button *ngIf="!testIsFinished" class="btn btn-success btn-block" (click)="getResult()">Get result</button>
+</div>

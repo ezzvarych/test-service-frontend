@@ -1,0 +1,20 @@
+<div class="col-lg-9 mx-auto" *ngIf="user.role > role.STUDENT.ordinal">
+  <h2 class="text-center">Сторінка викладача</h2>
+  <p class="text-info text-center">Беріть участь у житті спільноти, додавайте нові запитання та нові відео до бази</p>
+  <h4 class="text-center text-success">Ви можете допомогти з наступних дисциплін:</h4>
+  <div class="row">
+    <div class="col-sm-4" *ngFor="let area of allAreas">
+      <div class="card h-100">
+        <a [routerLink]="['/teacher/', area.id]">
+          <img class="card-img-top img-fluid" src="{{area.imageUrl}}" alt="Card image">
+          <div class="card-body">
+            <h4 class="card-title">{{area.title?.toUpperCase()}}</h4>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <!--<div *ngFor="let area of allAreas">-->
+    <!--<p><a [routerLink]="['/teacher/', area.id]">{{area.title?.toUpperCase()}}</a></p>-->
+  <!--</div>-->
+</div>

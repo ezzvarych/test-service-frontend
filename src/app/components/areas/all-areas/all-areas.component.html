@@ -1,0 +1,3 @@
+<div *ngFor="let area of allAreas">
+  <p><a [routerLink]="['/areas/', area.id]">{{area.title?.toUpperCase()}}</a></p>
+</div>

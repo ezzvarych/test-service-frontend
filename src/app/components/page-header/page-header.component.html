@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/"><strong>EZZNO</strong></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="#navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li *ngIf="!isLogged" class="nav-item"><a class="nav-link" routerLink="/register">Зареєструватися</a></li>
+      <li *ngIf="!isLogged" class="nav-item"><a class="nav-link" routerLink="/login">Увійти</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/">Головна</a></li>
+      <li *ngIf="user?.role === role.TEACHER.ordinal || user?.role === role.ADMIN.ordinal"><a class="nav-link" routerLink="/teacher">Сторінка вчителя</a></li>
+      <li *ngIf="user?.role === role.ADMIN.ordinal"><a class="nav-link" routerLink="/admin">Сторінка адміна</a></li>
+      <li ngbDropdown class="nav-item dropdown" *ngIf="isLogged">
+        <a ngbDropdownToggle class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
+           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{user?.realName}}
+        </a>
+        <div ngbDropdownMenu class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a ngbDropdownItem class="dropdown-item" (click)="click()" [routerLink]="['/users/', user.id]">Моя сторінка</a>
+          <div class="dropdown-divider"></div>
+          <a ngbDropdownItem class="dropdown-item" routerLink="/friends">Друзі</a>
+          <a ngbDropdownItem class="dropdown-item" routerLink="/competitions">Змагання</a>
+          <div class="dropdown-divider"></div>
+          <a ngbDropdownItem class="dropdown-item" (click)="logout()">Вийти</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <button (click)="logout()">Hot logout</button>
+</nav>
+

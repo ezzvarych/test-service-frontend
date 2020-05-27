@@ -1,0 +1,79 @@
+<div class="col-lg-9 mx-auto">
+  <h2 class="text-center"> Змагання з <a [routerLink]="['/areas/', info.competitionInfo.questionArea.id]">{{info.competitionInfo?.questionArea?.title}}</a>,
+    початок о
+    {{info.competitionInfo?.startTime | date: 'dd/MM/yyyy HH:mm'}}</h2>
+  <button class="btn btn-info" *ngIf="canStart" (click)="openQuestions()">Розпочати</button>
+  <h5>Статус: {{getStatus(info.competitionInfo.status)}}</h5>
+  <button class="btn btn-success" *ngIf="!currentUserCompete" (click)="joinCompetition()">Зареєструватися</button>
+  <button class="btn btn-info"
+          *ngIf="allCompResults.length === 0 && info.competitionInfo.status === status.FINISHED.ordinal"
+          (click)="getCompRes()">Подивитися результат
+  </button>
+  <div *ngIf="allCompResults.length > 0">
+    <table class="table table-bordered table-striped">
+      <thead>
+      <tr>
+        <th scope="col">Місце</th>
+        <th scope="col">Ім'я</th>
+        <th scope="col">Результат</th>
+        <th scope="col">Витрачено часу</th>
+      </tr>
+      </thead>
+      <tr *ngFor="let res of allCompResults; let i = index">
+        <th scope="row">{{i + 1}}</th>
+        <td><a [routerLink]="['/users/', res.user.id]">{{res.user.realName}}</a></td>
+        <td>{{res.result}}</td>
+        <td>{{res.timeSpent | timeSpent}}</td>
+      </tr>
+    </table>
+  </div>
+  <div *ngIf="competitionResult.competitionId">
+    <ngb-alert type="success">Результат - {{competitionResult.result}} балів за {{competitionResult.timeSpent}} мілісекунд</ngb-alert>
+  </div>
+  <h5>Користувачі, що беруть участь:</h5>
+  <div *ngFor="let user of info.users" class="card">
+    <div class="card-header">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="ml-2">
+            <div class="h5 m-0"><a [routerLink]="['/users/', user.id]">@{{user.login}}</a></div>
+            <div class="h7 text-muted">{{user.realName}} - {{user.role | role}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="questionShown" class="my-5">
+    <div class="card">
+      <div class="card-body">
+        <div class="card card-inner" *ngFor="let question of questions; index as i">
+          <div class="card-body">
+            <h4 class="text-center">Запитання: {{question.text}}</h4>
+            <div *ngIf="question.questionType === questionType.SINGLE_ANSWER.ordinal">
+              <div *ngFor="let option of question.answerOptions; let j = index;">
+                <input id="'radio' + {{j}}" type="radio" [value]="option"
+                       [(ngModel)]="userAnswers[i].answers[0]">
+                <label for="'radio' + {{j}}">
+                  {{option}}
+                </label>
+              </div>
+            </div>
+            <div *ngIf="question.questionType === questionType.MULTI_ANSWER.ordinal">
+              <div class="form-check" *ngFor="let option of question.answerOptions; let j = index;">
+                <input class="form-check-input" type="checkbox" id="'check' + {{j}}"
+                       [(ngModel)]="userAnswers[i].answers[j]">
+                <label class="form-check-label" for="'check' + {{j}}">
+                  {{option}}
+                </label>
+              </div>
+            </div>
+            <div *ngIf="question.questionType === questionType.OPEN.ordinal">
+              <input type="text" [(ngModel)]="userAnswers[i].answers[0]" placeholder="Відповідь" required="true">
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-success btn-block" (click)="finishComp()">Закінчити</button>
+    </div>
+  </div>
+</div>

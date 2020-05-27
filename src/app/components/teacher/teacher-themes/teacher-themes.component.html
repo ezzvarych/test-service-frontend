@@ -1,0 +1,82 @@
+<div class="col-lg-9 mx-auto">
+  <h1 class="text-center">{{questionArea.title}}</h1>
+  <button class="btn btn-info" *ngIf="isVideos || isQuestions" (click)="close()">Згорнути</button>
+  <div *ngIf="isVideos">
+    <h4 class="text-info">Відкриті відео з теми: {{currentTheme.theme}}</h4>
+    <div class="my-5">
+      <h6 class="text-info">Додати нове відео:</h6>
+      <div class="form-inline my-4">
+        <input type="text" class="form-control col-8" placeholder="Введіть URL" [(ngModel)]="newVideo.url">
+        <button (click)="addNewVideo()" class="btn btn-outline-success col-4">Додати</button>
+      </div>
+    </div>
+    <table class="table table-hover table-striped text-center">
+      <thead>
+      <tr>
+        <th scope="col">ID відео</th>
+        <th scope="col">URL</th>
+      </tr>
+      </thead>
+      <tr *ngFor="let video of videos">
+        <td style="vertical-align: middle;">{{video.id}}</td>
+        <td style="vertical-align: middle;"><a href="{{video.url}}" target="_blank">{{video.url}}</a></td>
+        <td class="border-0">
+          <button class="btn btn-danger" (click)="deleteVideo(video.id)">Remove</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div *ngIf="isQuestions">
+    <h4 class="text-info">Запитання з теми: {{currentTheme.theme}}</h4>
+    <app-add-new-questions [theme]="currentTheme" [questionsList]="questions"></app-add-new-questions>
+    <div class="my-5">
+      <div class="card">
+        <div class="card-body">
+          <div class="card card-inner" *ngFor="let question of questions; index as i">
+            <div class="card-body">
+              <h4 class="text-center">Запитання: {{question.text}}</h4>
+              <div *ngIf="question.questionType === questionType.SINGLE_ANSWER.ordinal">
+                <div *ngFor="let option of question.answerOptions; let j = index;">
+                  <input id="'radio' + {{j}}" type="radio" [value]="option">
+                  <label for="'radio' + {{j}}">
+                    {{option}}
+                  </label>
+                </div>
+              </div>
+              <div *ngIf="question.questionType === questionType.MULTI_ANSWER.ordinal">
+                <div class="form-check" *ngFor="let option of question.answerOptions; let j = index;">
+                  <input class="form-check-input" type="checkbox" id="'check' + {{j}}">
+                  <label class="form-check-label" for="'check' + {{j}}">
+                    {{option}}
+                  </label>
+                </div>
+              </div>
+              <div *ngIf="question.questionType === questionType.OPEN.ordinal">
+                <input type="text" placeholder="Відповідь" required="true">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6" *ngFor="let theme of questionArea.areaThemes">
+      <div class="card text-center">
+        <div class="card-body">
+          <h4 class="card-title text-info">Тема: {{theme.theme}}</h4>
+          <ul class="list-group list-group-horizontal d-flex justify-content-center">
+            <li class="list-group-item">
+              <button class="btn btn-link" (click)="openQuestions(theme)">Запитання</button>
+            </li>
+            <li class="list-group-item">
+              <button class="btn btn-link" (click)="openVideos(theme)">Навчальні відео</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

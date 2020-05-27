@@ -1,0 +1,38 @@
+<div class="mt-2 text-center" *ngIf="isLoaded" style="background-size: 100%"
+     [ngStyle]="setMyStyle()">
+  <div class="col-lg-9 mx-auto">
+    <h1>{{questionArea.title}}</h1>
+    <ul class="list-group list-group-horizontal header-menu">
+      <li class="list-group-item" *ngIf="!openLeaders"
+          (click)="openLeaders = true; getLeaderboardForArea(questionArea.id)">
+        Таблиця рекордів
+      </li>
+      <li *ngIf="openLeaders" (click)="openLeaders = false" class="list-group-item">Закрити таблицю</li>
+      <li class="list-group-item" (click)="startAreaTest()">
+        Пройти тест
+      </li>
+    </ul>
+    <div *ngIf="openLeaders">
+      <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th scope="col">Місце</th>
+          <th scope="col">Ім'я</th>
+          <th scope="col">Результат</th>
+          <th scope="col">Витрачено часу</th>
+        </tr>
+        </thead>
+        <tr *ngFor="let leader of leaderboard; let i = index">
+          <th scope="row">{{i + 1}}</th>
+          <td><a [routerLink]="['/users/', leader?.user?.id]">{{leader?.user?.realName}}</a></td>
+          <td>{{leader.result}}</td>
+          <td>{{leader.spendTime | timeSpent}}</td>
+        </tr>
+      </table>
+    </div>
+    <h3>Навчальні теми</h3>
+    <ul class="text-center list-group themes" *ngFor="let theme of questionArea.areaThemes">
+      <li class="list-group-item list-group-item-action"><a [routerLink]="['/videos/', theme.id]">{{theme.theme}}</a></li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,92 @@
+<div class="col-lg-9 mx-auto">
+  <div class="card">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs justify-content-center" id="myTab" role="tablist">
+        <li class="nav-item">
+          <button class="nav-link btn btn-link" (click)="openAvailable()" id="all-tab" data-toggle="tab" role="tab"
+             aria-controls="posts"
+             aria-selected="true">Усі змагання</button>
+        </li>
+        <li class="nav-item">
+          <button class="btn btn-link nav-link" (click)="openMy()" id="my-tab" data-toggle="tab" role="tab"
+             aria-controls="friends"
+             aria-selected="false">Мої змагання</button>
+        </li>
+        <li class="nav-item">
+          <button *ngIf="state !== 'NEW'" (click)="createNew()" class="btn btn-link nav-link" id="new-tab" data-toggle="tab" role="tab"
+             aria-controls="friends"
+             aria-selected="false">Створити нове</button>
+        </li>
+      </ul>
+    </div>
+    <div class="card-body">
+      <ngb-alert type="danger" *ngIf="notification" (close)="notification = ''">{{notification}}</ngb-alert>
+      <table *ngIf="state === 'ALL'" class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th scope="col">ID змагання</th>
+          <th scope="col">Дисципліна</th>
+          <th scope="col">Час початку</th>
+        </tr>
+        </thead>
+        <tr *ngFor="let comp of allCompetitions; let i = index">
+          <td scope="row"><a [routerLink]="['/competitions/', comp.id]">{{comp.id}}</a></td>
+          <td><a [routerLink]="['/areas/', comp.questionArea.id]">
+            {{comp.questionArea.title}}</a></td>
+          <td>{{comp.startTime | date: 'dd/MM/yyyy HH:mm'}}</td>
+        </tr>
+      </table>
+      <!--<div *ngIf="state === 'ALL'">-->
+        <!--<ul class="list-group" *ngFor="let comp of allCompetitions">-->
+          <!--<li class="list-group-item">-->
+            <!--<a [routerLink]="['/competitions/', comp.id]">-->
+              <!--{{comp.questionArea.title}} competition starts at {{ getDate(comp.startTime) }}-->
+            <!--</a>-->
+            <!--<button class="btn btn-success" *ngIf="state === 'ALL'" (click)="joinCompetition(comp.id)">Join</button>-->
+          <!--</li>-->
+        <!--</ul>-->
+      <!--</div>-->
+      <table *ngIf="state === 'MY'" class="table table-bordered table-striped text-center">
+        <thead>
+        <tr>
+          <th scope="col">ID змагання</th>
+          <th scope="col">Дисципліна</th>
+          <th scope="col">Час початку</th>
+        </tr>
+        </thead>
+        <tr *ngFor="let comp of myCompetitions; let i = index" [ngClass]="{'table-warning': comp.startTime < getNow()}">
+          <td scope="row"><a [routerLink]="['/competitions/', comp.id]">{{comp.id}}</a></td>
+          <td><a [routerLink]="['/areas', comp.questionArea.id]">
+            {{comp.questionArea.title}}</a></td>
+          <!--<td>{{getDate(comp.startTime)}}</td>-->
+          <td>{{comp.startTime | date: 'dd/MM/yyyy HH:mm'}}</td>
+          <td *ngIf="comp.startTime < getNow()">Already started</td>
+        </tr>
+      </table>
+      <!--<div *ngIf="state === 'MY'">-->
+        <!--<ul class="list-group" *ngFor="let comp of myCompetitions">-->
+          <!--<li class="list-group-item">-->
+            <!--<a [routerLink]="['/competitions/', comp.id]">-->
+              <!--{{comp.questionArea.title}} competition starts at {{ getDate(comp.startTime) }}-->
+            <!--</a>-->
+          <!--</li>-->
+        <!--</ul>-->
+      <!--</div>-->
+      <div *ngIf="state === 'NEW'" class="row">
+        <div class="col-5">
+          <h4>Оберіть тему:</h4>
+          <div *ngFor="let area of questionAreas">
+            <button class="btn btn-outline-success btn-block" [ngClass]="{active: newComp.areaId === area.id}" (click)="newComp.areaId = area.id">{{area.title}}</button>
+          </div>
+        </div>
+        <div class="col-2"></div>
+        <div class="col-5">
+          <h4>Оберіть час:</h4>
+          <ngb-datepicker #dp [(ngModel)]="ngbDateStruct"></ngb-datepicker>
+          <ngb-timepicker [(ngModel)]="ngbTimeStruct"></ngb-timepicker>
+        </div>
+        <button class="btn btn-success btn-block" (click)="submitNew()">Створити</button>
+      </div>
+    </div>
+  </div>
+</div>

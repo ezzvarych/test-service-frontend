@@ -1,0 +1,10 @@
+<p *ngIf="questionsVisible" (click)="questionsVisible = false; getQuestions();">Hide</p>
+<p *ngIf="!questionsVisible" (click)="questionsVisible = true;">Show</p>
+<div *ngIf="questionsVisible">
+  <div *ngFor="let question of questionOutputs">
+    <p>id - {{question.id}}</p>
+    <p>text - {{question.text}}</p>
+  </div>
+</div>
+<!--<iframe width="560" height="315" src="https://www.youtube.com/embed/V368gL3LFd0" frameborder="0" allowfullscreen></iframe>-->
+<a routerLink="/questions/create">Create new questions</a>

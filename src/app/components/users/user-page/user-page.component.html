@@ -1,0 +1,122 @@
+<div class="col-md-6 mx-auto">
+  <div class="card">
+    <div class="card-header">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="mr-2">
+            <!--<img class="rounded-circle" width="45" src="https://picsum.photos/50/50" alt="">-->
+          </div>
+          <div class="ml-2">
+            <div class="h5 m-0">@{{allOneUserInfo.userInfo.login}}</div>
+            <div class="h7 text-muted">{{allOneUserInfo.userInfo.realName}}</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="card-body">
+      <button class="btn btn-link" (click)="invite()" *ngIf="relationWithLoggedUser === null && !(id === currentUser)">
+        Запросити
+      </button>
+      <h5 *ngIf="relationWithLoggedUser === friendshipStatus.ACCEPTED">Ви вже дружите з цим користувачем</h5>
+      <h5 *ngIf="relationWithLoggedUser === friendshipStatus.PENDING">Ви вже надіслали запрошення цьому користувачу</h5>
+    </div>
+    <div class="card-body">
+      <!--<a class="card-link" href="#">-->
+      <!--<h5 class="card-title">Lorem ipsum dolor sit amet, consectetur adip.</h5>-->
+      <!--</a>-->
+        <p class="card-text" *ngIf="allOneUserInfo.userInfo.role">{{allOneUserInfo.userInfo.role | role}}</p>
+        <p class="card-text" *ngIf="allOneUserInfo.userInfo.desiredUniversity">Хоче вступити до <a
+          [href]="allOneUserInfo.userInfo.desiredUniversity.url" target="_blank">{{allOneUserInfo.userInfo.desiredUniversity.name}}</a>
+          у {{allOneUserInfo.userInfo.graduationYear}} році</p>
+    </div>
+  </div>
+
+
+  <!--- \\\\\\\Post-->
+  <div class="card">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+        <li class="nav-item" (click)="friendsAreOpened = false">
+          <a class="nav-link" [ngClass]="{active: !friendsAreOpened}" id="posts-tab" data-toggle="tab" role="tab"
+             aria-controls="posts"
+             aria-selected="true">Новини</a>
+        </li>
+        <li class="nav-item" (click)="getUserFriends(); friendsAreOpened = true">
+          <a class="nav-link" [ngClass]="{active: friendsAreOpened}" id="images-tab" data-toggle="tab" role="tab"
+             aria-controls="friends"
+             aria-selected="false">Друзі</a>
+        </li>
+      </ul>
+    </div>
+    <div class="card-body">
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
+          <div *ngIf="currentUser === id" class="form-group">
+            <label class="sr-only" for="message">Поділитися</label>
+            <textarea [(ngModel)]="newPostInput.text" class="form-control" id="message" rows="3"
+                      placeholder="Чим ви хочете поділитися?"></textarea>
+          </div>
+
+        </div>
+      </div>
+      <div *ngIf="currentUser === id" class="btn-toolbar justify-content-between">
+        <div class="btn-group">
+          <button type="submit" class="btn btn-primary" (click)="createNewPost()">Поділитися</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Post /////-->
+
+  <!--- \\\\\\\Post-->
+  <div *ngIf="friendsAreOpened">
+    <div *ngFor="let friend of friends" class="card">
+      <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex justify-content-between align-items-center">
+            <!--<div class="mr-2">-->
+            <!--<img class="rounded-circle" width="45" src="https://picsum.photos/50/50" alt="">-->
+            <!--</div>-->
+            <div class="ml-2">
+              <div class="h5 m-0"><a [routerLink]="['/users/', friend.id]"
+                                     (click)="updateComponentForAnotherUser(friend.id)">@{{friend.login}}</a></div>
+              <div class="h7 text-muted">{{friend.realName}} - {{friend.role | role}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!friendsAreOpened">
+    <div *ngFor="let news of allOneUserInfo.userNews.testResults" class="card">
+      <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex justify-content-between align-items-center">
+            <!--<div class="mr-2">-->
+            <!--<img class="rounded-circle" width="45" src="https://picsum.photos/50/50" alt="">-->
+            <!--</div>-->
+            <div class="ml-2">
+              <div class="h5 m-0">Пройшов тест з
+                <a [routerLink]="['/areas/', news.questionArea.id]">{{news.questionArea.title}}</a>
+                та отримав {{news.result}} бали(-ів)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngFor="let post of allOneUserInfo.userNews.posts" class="card">
+      <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center ml-2">
+          <div class="h5 m-0">Поділився: {{post.text}} о {{post.time | date: 'dd/MM/yyyy HH:mm'}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Post /////-->
+
+</div>
+

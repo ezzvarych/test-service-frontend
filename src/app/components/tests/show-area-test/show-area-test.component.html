@@ -1,0 +1,77 @@
+<!--<ul *ngFor="let question of test.testQuestions; index as i">-->
+  <!--<li>-->
+    <!--Text - {{question.text}}-->
+    <!--<div *ngIf="!testIsFinished">-->
+      <!--<div *ngIf="question.questionType === questionType.SINGLE_ANSWER">-->
+      <!--<span *ngFor="let option of question.answerOptions; let j = index;">{{option}}-->
+        <!--<input type="radio" [value]="option" [(ngModel)]="userAnswers[i].answers[0]" required="true">-->
+      <!--</span>-->
+      <!--</div>-->
+      <!--<div *ngIf="question.questionType === questionType.MULTI_ANSWER">-->
+      <!--<span *ngFor="let option of question.answerOptions; let j = index;">{{option}}-->
+        <!--<input type="checkbox" [value]="option" [(ngModel)]="userAnswers[i].answers[j]">-->
+      <!--</span>-->
+      <!--</div>-->
+      <!--<div *ngIf="question.questionType === questionType.OPEN">-->
+        <!--<input type="text" [(ngModel)]="userAnswers[i].answers[0]" required="true">-->
+      <!--</div>-->
+    <!--</div>-->
+    <!--<div *ngIf="testIsFinished | async">-->
+      <!--Your answer - {{analysisMap.get(question.id).userAnswerDto.answers}}-->
+      <!--<br>-->
+      <!--Correct - {{analysisMap.get(question.id).correct}}-->
+    <!--</div>-->
+  <!--</li>-->
+<!--</ul>-->
+<!--<button *ngIf="!testIsFinished" (click)="getResult()">Get result</button>-->
+<!--<div *ngIf="testIsFinished | async">-->
+  <!--<h4>Your result - {{testResult.result}}</h4>-->
+<!--</div>-->
+<div [ngStyle]="setStyle()">
+  <div class="col-lg-9 mx-auto">
+    <h2 class="text-center">Тест з навчальної дисципліни</h2>
+    <div *ngIf="testIsFinished | async" class="alert alert-success alert-block text-center font-weight-bold">
+      Вітаємо, ваш результат - {{testResult.result}} бали(-ів)
+    </div>
+    <div class="my-5">
+      <div class="card">
+        <div class="card-body">
+          <div class="card card-inner" *ngFor="let question of test.testQuestions; index as i">
+            <div class="card-body">
+              <h4 class="text-center">Запитання: {{question.text}}</h4>
+              <div *ngIf="!testIsFinished">
+                <div *ngIf="question.questionType === questionType.SINGLE_ANSWER.ordinal">
+                  <div *ngFor="let option of question.answerOptions; let j = index;">
+                    <input id="'radio' + {{j}}" type="radio" [value]="option"
+                           [(ngModel)]="userAnswers[i].answers[0]">
+                    <label for="'radio' + {{j}}">
+                      {{option}}
+                    </label>
+                  </div>
+                </div>
+                <div *ngIf="question.questionType === questionType.MULTI_ANSWER.ordinal">
+                  <div class="form-check" *ngFor="let option of question.answerOptions; let j = index;">
+                    <input class="form-check-input" type="checkbox" id="'check' + {{j}}"
+                           [(ngModel)]="userAnswers[i].answers[j]">
+                    <label class="form-check-label" for="'check' + {{j}}">
+                      {{option}}
+                    </label>
+                  </div>
+                </div>
+                <div *ngIf="question.questionType === questionType.OPEN.ordinal">
+                  <input type="text" [(ngModel)]="userAnswers[i].answers[0]" placeholder="Відповідь" required="true">
+                </div>
+              </div>
+              <div *ngIf="testIsFinished | async">
+                Ваша відповідь - {{analysisMap.get(question.id).userAnswerDto.answers}}
+                <br>
+                Це - {{analysisMap.get(question.id).correct ? '' : 'не'}}правильна відповідь
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button *ngIf="!testIsFinished" class="btn btn-success btn-block" (click)="getResult()">Get result</button>
+    </div>
+  </div>
+</div>

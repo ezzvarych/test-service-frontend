@@ -1,0 +1,75 @@
+<h2>Форма реєстрації</h2>
+<form [formGroup]="registrationForm" (ngSubmit)="onSubmit(registrationForm.value)">
+  <ngb-alert *ngIf="errorMessage" type="danger" (close)="errorMessage = ''">{{ errorMessage }}</ngb-alert>
+  <div class="form-group">
+    <label for="login">Логін</label>
+    <input id="login" type="text" formControlName="login" class="form-control"
+           [ngClass]="{ 'is-invalid': submitted && f.login.errors }"/>
+    <div *ngIf="submitted && f.login.errors" class="invalid-feedback">
+      <div *ngIf="f.login.errors.required">Введіть ваш майбутній логін!</div>
+      <div *ngIf="f.login.errors.minLength">Логін має містити хоча б 5 символів</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="password">Пароль</label>
+    <input id="password" type="password" formControlName="password" class="form-control"
+           [ngClass]="{ 'is-invalid': submitted && f.password.errors }"/>
+    <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+      <div *ngIf="f.password.errors.required">Введіть пароль</div>
+      <div *ngIf="f.password.errors.minlength">Пароль має містити хоча б 5 символів</div>
+    </div>
+  </div>
+
+  <div>
+    <label for="email">
+      Email
+    </label>
+    <input id="email" type="text" formControlName="email" class="form-control"
+           [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
+    <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+      <div *ngIf="f.email.errors.required">Email is required</div>
+      <div *ngIf="f.email.errors.email">Email is not valid</div>
+    </div>
+  </div>
+
+  <div>
+    <label for="role">
+      Роль
+    </label>
+    <select id="role" class="form-control"
+            name="role" formControlName="role" [ngClass]="{ 'is-invalid': submitted && f.role.errors }">
+      <option *ngFor="let val of roles.values" [value]="val.ordinal">{{val.name}}</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="realName">
+      Справжнє ім'я
+    </label>
+    <input id="realName" type="text" formControlName="realName" class="form-control"
+           [ngClass]="{ 'is-invalid': submitted && f.realName.errors }"/>
+    <div *ngIf="submitted && f.realName.errors" class="invalid-feedback">
+      <div *ngIf="f.realName.required">Your real name is required</div>
+    </div>
+  </div>
+
+  <div class="form-group mt-2">
+  <button class="btn btn-primary" type="submit">
+  <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+  Зареєструватися
+  </button>
+  <a routerLink="/login" class="btn btn-link">Cancel</a>
+  </div>
+</form>
+<!--<div *ngIf="error" class="alert alert-danger">{{error}}</div>-->
+<!--<h2>Register</h2>-->
+<!--<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">-->
+  <!--<div class="form-group">-->
+    <!--<button [disabled]="loading" class="btn btn-primary">-->
+      <!--<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>-->
+      <!--Register-->
+    <!--</button>-->
+    <!--<a routerLink="/login" class="btn btn-link">Cancel</a>-->
+  <!--</div>-->
+<!--</form>-->

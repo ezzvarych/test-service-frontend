@@ -1,0 +1,52 @@
+<div class="col-lg-8 col-md-10 mx-auto">
+  <h3 class="text-center mb-4">Сторінка ваших друзів</h3>
+  <div class="form-inline">
+    <input type="text" class="form-control col-8" placeholder="Введіть ім'я" [(ngModel)]="searchInput">
+    <button (click)="searchUser()" class="btn btn-outline-success col-4">Шукати</button>
+  </div>
+  <h4 *ngIf="foundUsers.length > 0">Знайдено: {{foundUsers.length}}</h4>
+  <div *ngFor="let user of foundUsers" class="card">
+    <div class="card-header">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="ml-2">
+            <div class="h5 m-0"><a [routerLink]="['/users/', user.id]">@{{user.login}}</a></div>
+            <div class="h7 text-muted">{{user.realName}} - {{user.role | role}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="isLoaded | async">
+    <h4>Очікують: {{getPendingFriends().length}}</h4>
+    <div *ngFor="let friend of getPendingFriends()" class="card">
+      <div class="card-header">
+        <div class="d-flex justify-content-between">
+          <div class="ml-2">
+            <div class="h5 m-0"><a [routerLink]="['/users/', friend.id]">@{{friend.login}}</a></div>
+            <div class="h7 text-muted">{{friend.realName}} - {{friend.role | role}}</div>
+          </div>
+          <div class="float-right">
+            <button class="btn btn-success" (click)="changeStatus(friend.id, friendshipStatus.ACCEPTED)">Прийняти
+            </button>
+            <button class="btn btn-danger" (click)="changeStatus(friend.id, friendshipStatus.REJECTED)">Відхилити
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h4>Друзі: {{getConfirmedFriends().length}}</h4>
+    <div *ngFor="let friend of getConfirmedFriends()" class="card">
+      <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="ml-2">
+              <div class="h5 m-0"><a [routerLink]="['/users/', friend.id]">@{{friend.login}}</a></div>
+              <div class="h7 text-muted">{{friend.realName}} - {{friend.role | role}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
